@@ -4,10 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Crypticsea Archive</title>
   </head>
   <body>
-    <h1>Crypticsea Archive</h1>
+    <h1><a href="/">
+        Crypticsea Archive
+    </a></h1>
     <h3>{linked-path}</h3>
     {files}
   </body>
@@ -89,7 +91,8 @@ a {
     document.addEventListener("DOMContentLoaded", () => {
       const files = document.querySelectorAll("a");
       files.forEach((file) => {
-        if (file.parentElement.nodeName == "H3") return;
+        const blacklistedParents = ["H1", "H3"];
+        if (blacklistedParents.includes(file.parentElement.nodeName)) return;
         if (file.childNodes[1] && file.childNodes[1].innerText == "") {
           file.parentElement.addEventListener("click", (e) => {
             file.click();
