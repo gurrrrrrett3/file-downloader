@@ -89,6 +89,7 @@ a {
     document.addEventListener("DOMContentLoaded", () => {
       const files = document.querySelectorAll("a");
       files.forEach((file) => {
+        if (file.parentElement.nodeName == "H3") return;
         if (file.childNodes[1] && file.childNodes[1].innerText == "") {
           file.parentElement.addEventListener("click", (e) => {
             file.click();
