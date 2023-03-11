@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Crypticsea Archive</h1>
+    <h3>{linked-path}</h3>
+    {files}
+  </body>
+  <style>
+   @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital@1&display=swap');
+
+body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: "Roboto Mono", monospace;
+    font-size: 14px;
+    line-height: 1.42857143;
+    margin: 0;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.view-tiles {
+    border-radius: 4px;
+    margin: 0 0 10px;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    cursor: pointer;
+}
+
+.view-tiles > li {
+    background-color: #000000;
+    border-radius: 4px;
+    color: #ffffff;
+    display: block;
+    flex: 1 1 0;
+    margin: 0 10px 0 0;
+    padding: 10px;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out;
+    border-color: #333;
+    border-style: solid;
+}
+
+.view-tiles > li:hover {
+    background-color: #333;
+}
+
+.view-tiles > li > a {
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 5px;
+    padding: 0.3rem;
+}
+
+.size {
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0 0 5px;
+    padding: 0.3rem;
+
+}
+
+.date {
+    font-size: 10px;
+    font-weight: 400;
+    margin: 0 0 5px;
+    padding: 0.3rem;
+
+}
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const files = document.querySelectorAll("a");
+      files.forEach((file) => {
+        if (file.childNodes[1] && file.childNodes[1].innerText == "") {
+          file.parentElement.addEventListener("click", (e) => {
+            file.click();
+          });
+          return;
+        }
+
+        if (file.childNodes[1]) {
+          const size = parseInt(file.childNodes[1].innerText);
+
+          if (size > 1000000) {
+            file.childNodes[1].innerText = `${(size / 1000000).toFixed(2)} MB`;
+          } else if (size > 1000) {
+            file.childNodes[1].innerText = `${(size / 1000).toFixed(2)} KB`;
+          } else {
+            file.childNodes[1].innerText = `${size} B`;
+          }
+        }
+
+        file.parentElement.addEventListener("click", (e) => {
+          e.preventDefault();
+          const url = file.getAttribute("href");
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", url, true);
+          xhr.responseType = "blob";
+          xhr.onload = () => {
+            if (xhr.status === 200) {
+              const blob = xhr.response;
+              const link = document.createElement("a");
+              link.href = window.URL.createObjectURL(blob);
+              link.download = file.childNodes[0].innerText;
+              link.click();
+            }
+          };
+          xhr.send();
+        });
+      });
+    });
+  </script>
+</html>
